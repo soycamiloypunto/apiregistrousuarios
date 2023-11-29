@@ -38,4 +38,5 @@ public class UsserRepository {
     public List<Usser> findByEmail(String email){
         return usserCRUDRepository.findByEmail(email);
     }
+
 }
