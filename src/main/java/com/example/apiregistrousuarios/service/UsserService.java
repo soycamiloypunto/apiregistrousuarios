@@ -31,9 +31,10 @@ public class UsserService {
         //enlisto los usuarios con ese correo
             if(usser.getId()==null){
                 usser.setId(usserRepository.save(usser).getId());
-            }
-            for(Phone phone: usser.getPhones()){
-                phone.setUsser(usser);
+            }else{
+                for(Phone phone: usser.getPhones()) {
+                    phone.setUsser(usser);
+                }
             }
             return usserRepository.save(usser);
     }
@@ -86,6 +87,9 @@ public class UsserService {
         return usserRepository.findByEmail(email);
     }
 
+
+
+    //pruebas
 
 
 }
