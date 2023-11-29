@@ -1,6 +1,7 @@
 package com.example.apiregistrousuarios.service;
 
 
+import com.example.apiregistrousuarios.entity.Phone;
 import com.example.apiregistrousuarios.entity.Usser;
 import com.example.apiregistrousuarios.repository.UsserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,34 +13,32 @@ import java.util.Optional;
 @Service
 public class UsserService {
     @Autowired
-    private UsserRepository UsserRepository;
+    private UsserRepository usserRepository;
 
     public List<Usser> getAll(){
-        return UsserRepository.getAll();
+        return usserRepository.getAll();
     }
 
-    public Optional<Usser> getUser(long id){
-        return UsserRepository.getUser(id);
+    public Optional<Usser> getUser(int id){
+        return usserRepository.getUser(id);
     }
 
     public Usser save(Usser usser){
         if(usser.getId()==null){
-            return UsserRepository.save(usser);
-        }else{
-            Optional<Usser> e= UsserRepository.getUser(usser.getId());
-            if(e.isEmpty()){
-                return UsserRepository.save(usser);
-            }else{
-                return usser;
-            }
+            usser.setId(usserRepository.save(usser).getId());
         }
+        for(Phone phone: usser.getPhones()){
+            phone.setUsser(usser);
+        }
+        return usserRepository.save(usser);
+
     }
 
     public Usser update(Usser usser){
         if(usser.getId()!=null){
-            return UsserRepository.save(usser);
+            return usserRepository.save(usser);
         }else{
-            Optional<Usser> e= UsserRepository.getUser(usser.getId());
+            Optional<Usser> e= usserRepository.getUser(usser.getId());
             if(!e.isEmpty()){
                 if(usser.getName()!=null){
                     e.get().setName(usser.getName());
@@ -60,7 +59,7 @@ public class UsserService {
                     e.get().setPhones(usser.getPhones());
                 }
 
-                UsserRepository.save(e.get());
+                usserRepository.save(e.get());
                 return e.get();
             }else{
                 return usser;
@@ -68,9 +67,9 @@ public class UsserService {
         }
     }
 
-    public boolean deleteUser(long id){
+    public boolean deleteUser(int id){
         Boolean aBoolean=getUser(id).map(User -> {
-            UsserRepository.delete(User);
+            usserRepository.delete(User);
             return true;
         }).orElse(aBoolean=false);
 
@@ -80,8 +79,9 @@ public class UsserService {
     //Customs
 
     public List<Usser> findByEmail(String email){
-        return UsserRepository.findByEmail(email);
+        return usserRepository.findByEmail(email);
     }
+
 
 
 }

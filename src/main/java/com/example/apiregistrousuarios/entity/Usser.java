@@ -16,24 +16,19 @@ import java.util.Optional;
 public class Usser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @Column
     private String name;
 
-    @Column
     private String email;
 
-    @Column
     private String password;
 
     @JsonIgnore
-    @Column
     private boolean active = true;
 
     @JsonIgnore
-    @Column
     private LocalDateTime created = LocalDateTime.now();
 
     @JsonIgnore
@@ -43,15 +38,14 @@ public class Usser {
     private LocalDateTime lastLogin= LocalDateTime.now();
 
 
-    @OneToMany(cascade ={CascadeType.ALL}, mappedBy = "user")
-    @JsonBackReference
+    @OneToMany(cascade ={CascadeType.ALL}, mappedBy = "usser")
+    @JsonIgnoreProperties(value={"usser"})
     private List<Phone> phones;
-
 
     public Usser() {
     }
 
-    public Usser(Long id, String name, String email, String password, boolean active, LocalDateTime created, LocalDateTime modified, LocalDateTime lastLogin, List<Phone> phones) {
+    public Usser(Integer id, String name, String email, String password, boolean active, LocalDateTime created, LocalDateTime modified, LocalDateTime lastLogin, List<Phone> phones) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -63,11 +57,11 @@ public class Usser {
         this.phones = phones;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -19,7 +19,7 @@ public class UsserRepository {
     }
 
     //Get por Id
-    public Optional<Usser> getUser(Long id){
+    public Optional<Usser> getUser(int id){
         return usserCRUDRepository.findById(id);
     }
 

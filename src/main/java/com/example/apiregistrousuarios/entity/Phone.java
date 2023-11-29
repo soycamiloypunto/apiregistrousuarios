@@ -9,40 +9,36 @@ import jakarta.persistence.*;
 public class Phone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @Column
     private String number;
 
-    @Column
     private String citycode;
 
-    @Column
     private String contrycode;
 
     @ManyToOne
-    @JoinColumn(name = "userId"/* , updatable = false */)
-    @JsonIgnoreProperties(value = "phones")
-    private Usser user;
-
+    @JoinColumn(name = "usserId")
+    //@JsonIgnoreProperties(value={"phones"})
+    private Usser usser;
 
     public Phone() {
     }
 
-    public Phone(Long id, String number, String citycode, String contrycode, Usser user) {
+    public Phone(Integer id, String number, String citycode, String contrycode, Usser usser) {
         this.id = id;
         this.number = number;
         this.citycode = citycode;
         this.contrycode = contrycode;
-        this.user = user;
+        this.usser = usser;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -70,11 +66,11 @@ public class Phone {
         this.contrycode = contrycode;
     }
 
-    public Usser getUser() {
-        return user;
+    public Usser getUsser() {
+        return usser;
     }
 
-    public void setUser(Usser user) {
-        this.user = user;
+    public void setUsser(Usser usser) {
+        this.usser = usser;
     }
 }

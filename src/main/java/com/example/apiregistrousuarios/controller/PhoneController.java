@@ -1,52 +1,49 @@
 package com.example.apiregistrousuarios.controller;
 
 import com.example.apiregistrousuarios.entity.Phone;
-import com.example.apiregistrousuarios.entity.Usser;
-import com.example.apiregistrousuarios.service.UsserService;
+import com.example.apiregistrousuarios.entity.Phone;
+import com.example.apiregistrousuarios.service.PhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user")
-public class UsserController {
+@RequestMapping("/api/phone")
+public class PhoneController {
     @Autowired
-    private UsserService usserService;
+    private PhoneService phoneService;
 
     @GetMapping("/all")
-    public List<Usser> getUsers(){
-        return usserService.getAll();
+    public List<Phone> getUsers(){
+        return phoneService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Usser> getUser(@PathVariable("id") int id){
-        return usserService.getUser(id);
+    public Optional<Phone> getUser(@PathVariable("id") int id){
+        return phoneService.getUser(id);
     }
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public Usser save(@RequestBody Usser usser){
-        return usserService.save(usser);
+    public Phone save(@RequestBody Phone phone){
+        return phoneService.save(phone);
     }
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.CREATED)
-    public Usser update(@RequestBody Usser usser){
-        return usserService.update(usser);
+    public Phone update(@RequestBody Phone phone){
+        return phoneService.update(phone);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public boolean delete(@PathVariable("id") int id){
-        return usserService.deleteUser(id);
+        return phoneService.deleteUser(id);
     }
 
 
-    //Customs
-
-
 }
-
