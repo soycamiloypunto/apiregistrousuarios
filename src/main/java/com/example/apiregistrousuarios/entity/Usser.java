@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class Usser {
 
     private String name;
 
+    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
 
     private String password;
@@ -29,14 +33,16 @@ public class Usser {
     private boolean active = true;
 
     @JsonIgnore
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created;
 
     @JsonIgnore
-    private LocalDateTime modified= LocalDateTime.now();
+    private LocalDateTime modified;
 
     @JsonIgnore
-    private LocalDateTime lastLogin= LocalDateTime.now();
+    private LocalDateTime lastLogin;
 
+    @JsonIgnore
+    private String token;
 
     @OneToMany(cascade ={CascadeType.ALL}, mappedBy = "usser")
     @JsonIgnoreProperties(value={"usser"})
@@ -45,7 +51,7 @@ public class Usser {
     public Usser() {
     }
 
-    public Usser(Integer id, String name, String email, String password, boolean active, LocalDateTime created, LocalDateTime modified, LocalDateTime lastLogin, List<Phone> phones) {
+    public Usser(Integer id, String name, String email, String password, boolean active, LocalDateTime created, LocalDateTime modified, LocalDateTime lastLogin, String token, List<Phone> phones) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -54,6 +60,7 @@ public class Usser {
         this.created = created;
         this.modified = modified;
         this.lastLogin = lastLogin;
+        this.token = token;
         this.phones = phones;
     }
 
@@ -119,6 +126,14 @@ public class Usser {
 
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public List<Phone> getPhones() {

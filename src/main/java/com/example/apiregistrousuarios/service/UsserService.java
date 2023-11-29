@@ -5,10 +5,13 @@ import com.example.apiregistrousuarios.entity.Phone;
 import com.example.apiregistrousuarios.entity.Usser;
 import com.example.apiregistrousuarios.repository.UsserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
+
 
 @Service
 public class UsserService {
@@ -30,7 +33,16 @@ public class UsserService {
         for(Phone phone: usser.getPhones()){
             phone.setUsser(usser);
         }
+
+        // Agregar los campos nuevos
+        //usser.setCreated(LocalDateTime.now());
+        usser.setModified(LocalDateTime.now());
+        usser.setLastLogin(LocalDateTime.now());
+        usser.setToken(UUID.randomUUID().toString());
+        usser.setActive(true);
+
         return usserRepository.save(usser);
+
 
     }
 
