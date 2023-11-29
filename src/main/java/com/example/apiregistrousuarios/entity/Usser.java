@@ -1,15 +1,19 @@
 package com.example.apiregistrousuarios.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Entity
-public class Usuario {
+@Table(name="Usser")
+public class Usser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,38 +28,39 @@ public class Usuario {
     @Column
     private String password;
 
+    @JsonIgnore
+    @Column
+    private boolean active = true;
 
     @JsonIgnore
     @Column
-    private boolean active;
+    private LocalDateTime created = LocalDateTime.now();
 
     @JsonIgnore
-    @Column
-    private LocalDateTime created;
+    private LocalDateTime modified= LocalDateTime.now();
 
-    @OneToMany(cascade ={CascadeType.ALL}, mappedBy = "usuario")
-    @JsonIgnoreProperties(value="usuario")
-    //@JsonIgnore
-    private List<Telefono> phones;
-
-
-    @OneToMany(cascade ={CascadeType.ALL}, mappedBy = "usuario")
-    @JsonIgnoreProperties(value="usuario")
     @JsonIgnore
-    private List<Inicio> logins;
+    private LocalDateTime lastLogin= LocalDateTime.now();
 
-    public Usuario() {
+
+    @OneToMany(cascade ={CascadeType.ALL}, mappedBy = "user")
+    @JsonBackReference
+    private List<Phone> phones;
+
+
+    public Usser() {
     }
 
-    public Usuario(Long id, String name, String email, String password, boolean active, LocalDateTime created, List<Telefono> phones, List<Inicio> logins) {
+    public Usser(Long id, String name, String email, String password, boolean active, LocalDateTime created, LocalDateTime modified, LocalDateTime lastLogin, List<Phone> phones) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.active = active;
         this.created = created;
+        this.modified = modified;
+        this.lastLogin = lastLogin;
         this.phones = phones;
-        this.logins = logins;
     }
 
     public Long getId() {
@@ -106,19 +111,27 @@ public class Usuario {
         this.created = created;
     }
 
-    public List<Telefono> getPhones() {
+    public LocalDateTime getModified() {
+        return modified;
+    }
+
+    public void setModified(LocalDateTime modified) {
+        this.modified = modified;
+    }
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public List<Phone> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<Telefono> phones) {
+    public void setPhones(List<Phone> phones) {
         this.phones = phones;
-    }
-
-    public List<Inicio> getLogins() {
-        return logins;
-    }
-
-    public void setLogins(List<Inicio> logins) {
-        this.logins = logins;
     }
 }

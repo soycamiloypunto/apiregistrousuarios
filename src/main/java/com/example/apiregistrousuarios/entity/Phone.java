@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
-public class Telefono {
+@Table(name="Phone")
+public class Phone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,24 +19,23 @@ public class Telefono {
     private String citycode;
 
     @Column
-    private String countrycode;
-
-    //@JsonIgnore
+    private String contrycode;
 
     @ManyToOne
-    @JoinColumn(name = "usuarioId"/* , updatable = false */)
-    @JsonIgnoreProperties(value="telefonos")
-    private Usuario usuario;
+    @JoinColumn(name = "userId"/* , updatable = false */)
+    @JsonIgnoreProperties(value = "phones")
+    private Usser user;
 
-    public Telefono() {
+
+    public Phone() {
     }
 
-    public Telefono(Long id, String number, String citycode, String countrycode, Usuario usuario) {
+    public Phone(Long id, String number, String citycode, String contrycode, Usser user) {
         this.id = id;
         this.number = number;
         this.citycode = citycode;
-        this.countrycode = countrycode;
-        this.usuario = usuario;
+        this.contrycode = contrycode;
+        this.user = user;
     }
 
     public Long getId() {
@@ -62,19 +62,19 @@ public class Telefono {
         this.citycode = citycode;
     }
 
-    public String getCountrycode() {
-        return countrycode;
+    public String getContrycode() {
+        return contrycode;
     }
 
-    public void setCountrycode(String countrycode) {
-        this.countrycode = countrycode;
+    public void setContrycode(String contrycode) {
+        this.contrycode = contrycode;
     }
 
-    public Usuario getUser() {
-        return usuario;
+    public Usser getUser() {
+        return user;
     }
 
-    public void setUser(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUser(Usser user) {
+        this.user = user;
     }
 }
