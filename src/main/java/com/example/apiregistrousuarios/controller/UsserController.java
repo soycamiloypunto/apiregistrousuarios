@@ -1,5 +1,6 @@
 package com.example.apiregistrousuarios.controller;
 
+import com.example.apiregistrousuarios.entity.Phone;
 import com.example.apiregistrousuarios.entity.Usser;
 import com.example.apiregistrousuarios.messages.CustomErrorResponse;
 import com.example.apiregistrousuarios.messages.CustomMessageResponse;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/user")
@@ -29,6 +31,7 @@ public class UsserController {
     public Optional<Usser> getUser(@PathVariable("id") int id){
         return usserService.getUser(id);
     }
+
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,6 +50,32 @@ public class UsserController {
             // Devuelvo el mensaje de error
             return (ResponseEntity<T>) ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } else {
+
+            // Validate the email format
+            Pattern emailPattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+            if (!emailPattern.matcher(usser.getEmail()).matches()) {
+                // The email format is invalid
+                CustomErrorResponse errorResponse = new CustomErrorResponse();
+                errorResponse.setCode(HttpStatus.BAD_REQUEST.value());
+                errorResponse.setMessage("El correo electrónico ingresado no es válido: EJ mail@mail.com");
+                return (ResponseEntity<T>) ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+
+            // Validate the password
+            Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-zA-Z])(?=.*[0-9])(?!.*\\s).{5,}$");
+            if (!PASSWORD_PATTERN.matcher(usser.getPassword()).matches()) {
+                // The password is invalid
+                CustomErrorResponse errorResponse = new CustomErrorResponse();
+                errorResponse.setCode(HttpStatus.BAD_REQUEST.value());
+                errorResponse.setMessage("La contraseña ingresada no es válida");
+                return (ResponseEntity<T>) ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+
+
+            //Agrego el identificador a los telefonos
+            for(Phone phone: usser.getPhones()) {
+                phone.setUsser(usser);
+            }
 
             // Agregar los campos nuevos
             usser.setCreated(LocalDateTime.now());

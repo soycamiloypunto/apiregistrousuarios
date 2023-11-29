@@ -3,8 +3,10 @@ package com.example.apiregistrousuarios.service;
 
 import com.example.apiregistrousuarios.entity.Phone;
 import com.example.apiregistrousuarios.entity.Usser;
+import com.example.apiregistrousuarios.messages.CustomErrorResponse;
 import com.example.apiregistrousuarios.messages.CustomMessageResponse;
 import com.example.apiregistrousuarios.repository.UsserRepository;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +29,7 @@ public class UsserService {
         return usserRepository.getUser(id);
     }
 
-    public Usser save(Usser usser) {
-        //enlisto los usuarios con ese correo
-            if(usser.getId()==null){
-                usser.setId(usserRepository.save(usser).getId());
-            }else{
-                for(Phone phone: usser.getPhones()) {
-                    phone.setUsser(usser);
-                }
-            }
-            return usserRepository.save(usser);
-    }
+    public Usser save(Usser usser) { return usserRepository.save(usser); }
 
     public Usser update(Usser usser){
         if(usser.getId()!=null){
