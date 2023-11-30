@@ -7,6 +7,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,6 +28,9 @@ public class UsserService {
     }
 
     public Usser save(Usser usser) {
+        //Hash Unidireccional
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        usser.setPassword(encoder.encode(usser.getPassword()));
         return usserRepository.save(usser);
     }
 
