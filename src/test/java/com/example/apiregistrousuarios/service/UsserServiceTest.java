@@ -56,6 +56,9 @@ class UsserServiceTest {
         assertNotNull(usserService.save(new Usser()));
     }
 
+    /*
+    conjunto de pruebas verifica que el método findByEmail() de la clase usserService devuelve una lista vacía cuando se le pasa una dirección de correo electrónico que no existe en la base de datos.
+     */
     @Test
     void findByEmail() {
         // Define el comportamiento del mock

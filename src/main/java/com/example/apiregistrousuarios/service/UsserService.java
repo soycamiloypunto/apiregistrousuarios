@@ -1,19 +1,16 @@
 package com.example.apiregistrousuarios.service;
 
 
-import com.example.apiregistrousuarios.entity.Phone;
 import com.example.apiregistrousuarios.entity.Usser;
-import com.example.apiregistrousuarios.messages.CustomErrorResponse;
-import com.example.apiregistrousuarios.messages.CustomMessageResponse;
 import com.example.apiregistrousuarios.repository.UsserRepository;
-import org.apache.coyote.BadRequestException;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -29,7 +26,19 @@ public class UsserService {
         return usserRepository.getUser(id);
     }
 
-    public Usser save(Usser usser) { return usserRepository.save(usser); }
+    public Usser save(Usser usser) {
+        return usserRepository.save(usser);
+    }
+
+    public boolean isValidEmail(String email) {
+        Pattern emailPattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+        return emailPattern.matcher(email).matches();
+    }
+
+    public boolean isValidPassword(String password) {
+        Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-zA-Z])(?=.*[0-9])(?!.*\\s).{5,}$");
+        return password.matches(String.valueOf(PASSWORD_PATTERN));
+    }
 
     public Usser update(Usser usser){
         if(usser.getId()!=null){
@@ -79,7 +88,19 @@ public class UsserService {
         return usserRepository.findByEmail(email);
     }
 
+    public String setToken(Usser usser) {
+        // Crear a JWT builder
+        JwtBuilder builder = Jwts.builder();
+        // Configurar el Token
+        builder.setSubject(usser.getName());
+        // Configurar vencimiento
+        builder.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60));
+        // Firmar
+        builder.signWith(SignatureAlgorithm.HS256, "my-secret-key");
+        // Devuelvo el Token
+        return builder.compact();
 
+    }
 
     //pruebas
 
