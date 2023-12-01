@@ -1,0 +1,79 @@
+Diagrama de flujo para el registro de usuarios
+
+Entradas:
+
+Solicitud HTTP con el cuerpo de la siguiente forma:
+JSON
+{
+  "name": "Juan Rodriguez",
+  "email": "juan@rodriguez.org",
+  "password": "hunter2",
+  "phones": [
+    {
+      "number": "1234567",
+      "citycode": "1",
+      "contrycode": "57"
+    }
+  ]
+}
+Usa el código con precaución. Más información
+Salidas:
+
+Código de estado HTTP 200 en caso de éxito
+Código de estado HTTP 400 en caso de error
+En caso de éxito, los siguientes campos:
+
+id
+created
+modified
+last_login
+token
+isactive
+Proceso:
+
+El controlador recibe la solicitud HTTP.
+El controlador valida la solicitud:
+Verifica que la estructura del cuerpo de la solicitud sea la correcta.
+Verifica que el correo electrónico siga la expresión regular configurada.
+Verifica que la contraseña siga la expresión regular configurada.
+Si la solicitud es válida, el controlador llama al servicio de registro de usuarios.
+El servicio de registro de usuarios crea un nuevo usuario con los datos recibidos de la solicitud.
+El servicio de registro de usuarios verifica si el correo electrónico ya existe en la base de datos.
+Si el correo electrónico existe, el servicio devuelve un error "El correo ya registrado".
+Si el correo electrónico no existe, el servicio genera un token de acceso para el usuario.
+El servicio persiste el usuario y el token en la base de datos.
+El servicio devuelve el usuario con los campos especificados.
+
+
+Diagrama:
+
+Fragmento de código
+sequenceDiagram
+  participant Cliente as C
+  participant Controlador as Cont
+  participant Servicio as Serv
+
+  C ->> Cont: POST /api/user
+
+  Cont ->> Serv: registrarUsuario(data)
+
+  Serv ->> Cont: dataValida
+
+  alt dataValida
+    Cont ->> Serv: crearUsuario(data)
+    Serv ->> Cont: usuarioCreado
+
+    alt correoExistente
+      Cont ->> C: 400 El correo ya registrado
+    else
+      Serv ->> Cont: tokenGenerado
+      Cont ->> Serv: persistirUsuario(usuarioCreado, tokenGenerado)
+      Serv ->> Cont: usuarioPersistido
+      Cont ->> C: 200 {id, created, modified, last_login, token, isactive}
+    end
+  else
+    Cont ->> C: 400 Datos inválidos
+  end
+
+
+
