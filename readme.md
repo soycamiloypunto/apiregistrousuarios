@@ -1,5 +1,5 @@
 Requisitos
-Java 11 o superior
+Java 21 o superior
 Maven 3.8.2 o superior
 
 Instalación
