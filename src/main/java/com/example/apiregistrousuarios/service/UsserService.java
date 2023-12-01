@@ -100,10 +100,9 @@ public class UsserService {
         // Configurar el Token
         builder.setSubject(usser.getName());
         // Configurar vencimiento
-        builder.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60));
+        builder.setExpiration(new Date(System.currentTimeMillis() - 1000 * 20));
         //Genero una contraseña aleaotoria basado en el algoritmo h2256
         SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
         // Firmar
         builder.signWith(secretKey);
         // Devuelvo el Token

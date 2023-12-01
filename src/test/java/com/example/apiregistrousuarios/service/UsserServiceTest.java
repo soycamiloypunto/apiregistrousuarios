@@ -6,10 +6,12 @@ import com.example.apiregistrousuarios.repository.UsserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,5 +80,26 @@ class UsserServiceTest {
         List<Usser> exists = usserService.findByEmail("mail@mail.com");
         // Verifica el resultado
         assertEquals(1, exists.size());
+    }
+
+    @Test
+    void deleteUser() {
+        // Create a mock UsserRepository
+        UsserRepository mockUsserRepository = Mockito.mock(UsserRepository.class);
+
+        // Create a UsserService instance with the mock UsserRepository
+        UsserService usserService = new UsserService();
+
+        // Create a mock Usser object
+        Usser mockUsser = Mockito.mock(Usser.class);
+
+        // When the UsserRepository.getUser() method is called with id 1, return the mock Usser object
+        Mockito.when(mockUsserRepository.getUser(1)).thenReturn(Optional.of(mockUsser));
+
+        // Call the deleteUser() method
+        usserService.deleteUser(1);
+
+        // Verify that the UsserRepository.delete() method was called
+        Mockito.verify(mockUsserRepository, Mockito.times(1)).delete(mockUsser);
     }
 }

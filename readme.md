@@ -11,7 +11,7 @@ git clone https://github.com/soycamiloypunto/apiregistrousuarios.git
 
 2. Cambie al directorio de la aplicación:
 
-cd aplicacion-springboot-ejemplo
+cd apiregistrousuarios
 
 
 3. Ejecute el siguiente comando para compilar la aplicación:
