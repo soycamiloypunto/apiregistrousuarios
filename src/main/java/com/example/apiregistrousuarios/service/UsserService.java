@@ -6,10 +6,12 @@ import com.example.apiregistrousuarios.repository.UsserRepository;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -99,8 +101,11 @@ public class UsserService {
         builder.setSubject(usser.getName());
         // Configurar vencimiento
         builder.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60));
+        //Genero una contraseña aleaotoria basado en el algoritmo h2256
+        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
         // Firmar
-        builder.signWith(SignatureAlgorithm.HS256, "my-secret-key");
+        builder.signWith(secretKey);
         // Devuelvo el Token
         return builder.compact();
 
